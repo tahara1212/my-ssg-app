@@ -1,5 +1,5 @@
 
-import { client } from "@/lib/client";
+import { client } from "../../lib/client";
 
 /**
  * getArticles関数のProps
