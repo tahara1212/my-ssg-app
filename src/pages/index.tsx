@@ -1,55 +1,23 @@
 import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
-import { getArticles } from "./api/getArticles";
-
-const inter = Inter({ subsets: ["latin"] });
-
-export const getStaticProps = (async () => {
-  const articlesResponse = await getArticles({ limit: 10 });
-
-  return {
-    props: {
-      articlesResponse,
-    }
-  }
-})
+import { GetStaticProps } from 'next';
+import { client } from "@/lib/client";
 
 export type ArticleContents = {
-  /** 記事の本文 */
   body?: string;
-  /** 記事ID */
   id: string;
-
-  /** 記事が作成された日付（ISO string) */
   createdAt: string;
-
-  /** 記事が更新された日付（ISO string) */
   updatedAt: string;
-
-  /** 記事が入稿された日付（ISO string) */
   publishedAt: string;
-
-  /** 記事が編集された日付（ISO string) */
   revisedAt: string;
   tagman: any;
   tags: any;
-  /** 記事のタイトル */
   title: string;
 }
 
 export type ArticlesResponse = {
-  /** 記事のリスト */
   contents: ArticleContents[];
-
-  /** 記事の数 */
   totalCount: number;
-
-  /** 記事リストの位置 */
   offset: number;
-
-  /** 返す記事の上限 */
   limit: number;
 };
 
@@ -57,8 +25,8 @@ interface HomeProps {
   articlesResponse: ArticlesResponse;
 }
 
-export default function Home({articlesResponse}: HomeProps) {
-  console.log(articlesResponse)
+const Home: React.FC<HomeProps> = ({ articlesResponse }) => {
+  console.log(articlesResponse);
   return (
     <>
       <Head>
@@ -67,8 +35,8 @@ export default function Home({articlesResponse}: HomeProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`${styles.main} ${inter.className}`}>
-      <h1>Articles</h1>
+      <main>
+        <h1>Articles14</h1>
         <ul>
           {articlesResponse.contents.map((article) => (
             <li key={article.id}>
@@ -80,4 +48,20 @@ export default function Home({articlesResponse}: HomeProps) {
       </main>
     </>
   );
-}
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  // APIエンドポイントからデータを直接取得
+  const articlesResponse = await client.get({
+    endpoint: "articles",
+    queries: { limit: 10, orders: "-publishedAt" },
+  });
+
+  return {
+    props: {
+      articlesResponse,
+    },
+  };
+};
+
+export default Home;
