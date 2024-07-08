@@ -37,31 +37,31 @@ const Home: React.FC<HomeProps> = ({ articlesResponse }) => {
       </Head>
       <main>
         <h1>Articles14</h1>
-        <ul>
+        {/* <ul>
           {articlesResponse.contents.map((article) => (
             <li key={article.id}>
               <h2>{article.title}</h2>
               <p>{article.createdAt}</p>
             </li>
           ))}
-        </ul>
+        </ul> */}
       </main>
     </>
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-  // APIエンドポイントからデータを直接取得
-  const articlesResponse = await client.get({
-    endpoint: "articles",
-    queries: { limit: 10, orders: "-publishedAt" },
-  });
+// export const getStaticProps: GetStaticProps = async () => {
+//   // APIエンドポイントからデータを直接取得
+//   const articlesResponse = await client.get({
+//     endpoint: "articles",
+//     queries: { limit: 10, orders: "-publishedAt" },
+//   });
 
-  return {
-    props: {
-      articlesResponse,
-    },
-  };
-};
+//   return {
+//     props: {
+//       articlesResponse,
+//     },
+//   };
+// };
 
 export default Home;
