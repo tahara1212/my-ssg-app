@@ -1,32 +1,19 @@
 import Head from "next/head";
-import { GetStaticProps } from 'next';
-import { client } from "@/lib/client";
+import { getArticles } from "./api/getArticles";
 
-export type ArticleContents = {
-  body?: string;
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-  revisedAt: string;
-  tagman: any;
-  tags: any;
-  title: string;
-}
 
-export type ArticlesResponse = {
-  contents: ArticleContents[];
-  totalCount: number;
-  offset: number;
-  limit: number;
-};
+export const getStaticProps = (async () => {
+  const articlesResponse = await getArticles({ limit: 10 });
 
-interface HomeProps {
-  articlesResponse: ArticlesResponse;
-}
+  return {
+    props: {
+      articlesResponse,
+    }
+  }
+})
 
-const Home: React.FC<HomeProps> = ({ articlesResponse }) => {
-  console.log(articlesResponse);
+export default function Home({articlesResponse}) {
+  console.log(articlesResponse)
   return (
     <>
       <Head>
@@ -36,32 +23,16 @@ const Home: React.FC<HomeProps> = ({ articlesResponse }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1>Articles14</h1>
-        {/* <ul>
+      <h1>Articles</h1>
+        <ul>
           {articlesResponse.contents.map((article) => (
             <li key={article.id}>
               <h2>{article.title}</h2>
               <p>{article.createdAt}</p>
             </li>
           ))}
-        </ul> */}
+        </ul>
       </main>
     </>
   );
-};
-
-// export const getStaticProps: GetStaticProps = async () => {
-//   // APIエンドポイントからデータを直接取得
-//   const articlesResponse = await client.get({
-//     endpoint: "articles",
-//     queries: { limit: 10, orders: "-publishedAt" },
-//   });
-
-//   return {
-//     props: {
-//       articlesResponse,
-//     },
-//   };
-// };
-
-export default Home;
+}
