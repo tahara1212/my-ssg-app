@@ -1,16 +1,4 @@
 import Head from "next/head";
-import { getArticles } from "./api/getArticles";
-
-
-export const getStaticProps = (async () => {
-  const articlesResponse = await getArticles({ limit: 10 });
-
-  return {
-    props: {
-      articlesResponse,
-    }
-  }
-})
 
 export default function Home({articlesResponse}: any) {
   console.log(articlesResponse)
@@ -24,14 +12,6 @@ export default function Home({articlesResponse}: any) {
       </Head>
       <main>
       <h1>Articles</h1>
-        <ul>
-          {articlesResponse.contents.map((article: any) => (
-            <li key={article.id}>
-              <h2>{article.title}</h2>
-              <p>{article.createdAt}</p>
-            </li>
-          ))}
-        </ul>
       </main>
     </>
   );
